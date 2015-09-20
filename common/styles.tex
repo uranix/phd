@@ -128,3 +128,11 @@ justification=centering,            % Центрирование подписе�
 \setlist{nosep,%                                    % Единый стиль для всех списков (пакет enumitem), без дополнительных интервалов.
     labelindent=\parindent,leftmargin=*%            % Каждый пункт, подпункт и перечисление записывают с абзацного отступа (ГОСТ 2.105-95, 4.1.8)
 }
+
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dpd}[2]{\dfrac{\partial #1}{\partial #2}}
+\let\dividesymbol\div
+\renewcommand{\div}{\operatorname{div}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcommand{\bvec}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\cutefrac}[2]{{}^{#1}\mkern-5mu/{\!}_{#2}}

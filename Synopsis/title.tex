@@ -16,7 +16,7 @@
 \textbf {\Large \thesisTitle}
 
 \vspace{0pt plus3fill} %число перед fill = кратность относительно некоторого расстояния fill, кусками которого заполнены пустые места
-{\large Специальность \thesisSpecialtyNumber\ "---\par <<\thesisSpecialtyTitle>>}
+{\large Специальность \thesisSpecialtyNumber\ "--- \thesisSpecialtyTitle}
 
 \vspace{0pt plus1.5fill} %число перед fill = кратность относительно некоторого расстояния fill, кусками которого заполнены пустые места
 \Large{Автореферат}\par
@@ -31,7 +31,7 @@
 \newpage
 % оборотная сторона обложки
 \thispagestyle{empty}
-\noindent Работа выполнена в \thesisOrganization
+\noindent Работа выполнена на \thesisWhere
 
 \par\bigskip
 %\begin{table}[h] % считается не очень правильным использовать окружение table, не задавая caption
@@ -71,13 +71,13 @@
     \begin{tabular}{p{8cm}cr}
         \begin{tabular}{p{8cm}}
             \sfs Ученый секретарь  \\
-            \sfs диссертационного совета  \\
-            \sfs \defenseCouncilNumber, \defenseSecretaryRegalia
+            \sfs диссертационного совета \defenseCouncilNumber
         \end{tabular} 
     &
-        \begin{tabular}{c}
-            \includegraphics[height=1cm]{secretary-signature} 
-        \end{tabular} 
+%        \hspace{5em}
+        \begin{tabular}{r}\\
+        \includegraphics[width=4.5em]{secretary} 
+        \end{tabular}         
     &
         \begin{tabular}{r}
             \\
