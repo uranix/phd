@@ -1,11 +1,232 @@
 \chapter{Численный метод для вариационной постановки задачи переноса излучения}
 
+Самосопряженные задачи в вариационной постановке весьма удобны для построения численных методов. При этом построенные методы сохраняют самосопряженность разностного оператора, даже на неструктурированных сетках. 
+
 \section{Метод Ритца}
-\subsection{Пространственная дискретизация}
+
+В основе метода Ритца \cite{marchuk1981} лежит идея замены исходной задачи минимизации функционала $\mathcal{G}(\varphi)$ в пространстве $\mathfrak{H}_0$ на задачу минимизации этого же функционала в конечномерном подпространстве $\mathcal{H}_0 \subset \mathfrak{H}_0$. При этом решение разлагается по базису $\psi_i(\vec r, \vec \Omega)$ пространства $\mathcal{H}_0$:
+\[
+\varphi(\vec r, \vec \Omega) = \sum_i \varphi_i \psi_i(\vec r, \vec \Omega).
+\]
+Подставляя это выражение в задачу \eqref{eq:variational} минимизации $\mathcal{G}(\varphi)$
+\[
+[\varphi, \varphi] - 2 (\varphi, I_\text{p}) \to \min_{\varphi \in \mathcal{H}_0}
+\]
+и пользуясь линейностью скалярных произведений, имеем
+\[
+\sum_{i,j} \varphi_{i}\varphi_{j} [\psi_i, \psi_j] - 2 \sum_{j} \varphi_i(\psi_i, I_\text{p})\to \min_{\varphi \in \mathcal{H}_0}.
+\]
+Эта задача является задачей минимизации квадратичной формы и сводится к системе линейных уравнений
+\begin{equation*}
+\sum_{j} [\psi_i, \psi_j] \varphi_j = (\psi_i, I_\text{p}), \qquad i = 1, 2, \dots, \operatorname{dim} \mathcal{H}_0.
+\end{equation*}
+
+На практике удобно выбрирать базис пространства $\mathcal{H}_0$ в виде прямого произведения базиса в координатном пространстве и базиса в угловом пространстве:
+\begin{gather}
+\varphi(\vec r, \vec \Omega) = \sum_k \varphi_{k}(\vec r)\theta_k(\vec \Omega)\\
+\varphi_k(\vec r) = \sum_i \varphi_{i,k} \phi_i(\vec r)\\
+\psi_{i,k}(\vec r, \vec \Omega) = \phi_i(\vec r) \theta_k (\vec \Omega).
+\label{eq:discrete}
+\end{gather}
+Отметим, что в силу четности $\varphi$ по $\vec \Omega$ в качестве $\theta_k(\vec \Omega)$ разумно выбирать также четные функции.
+
 \subsection{Угловая дискретизация}
 
+Подставим представление \eqref{eq:discrete} базисных функций в скалярное произведение $(\psi_{i,k}, \psi_{i',k'})$:
+\begin{multline*}
+(\psi_{i,k}, \psi_{i',k'}) = \iint\limits_{G \times 4\pi} 
+\varkappa(\vec r) \phi_i(\vec r) \theta_k(\vec \Omega)\phi_{i'}(\vec r)  \theta_{k'}(\vec \Omega) d\vec r d\Omega = \\ =
+\int\limits_{4\pi} \theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega
+\int\limits_G \varkappa(\vec r) \phi_i(\vec r) \phi_{i'}(\vec r) d\vec r.
+\end{multline*}
+Обозначим первый интеграл от угловых базисных функций через $\mathscr H_{kk'}$:
+\[
+\mathscr H_{kk'} \equiv \int\limits_{4\pi} \theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega.
+\]
+Данная матрица зависит только от углового базиса, и, при необходимости, может быть сделана единичной путем ортогонализации базиса, например, с помощью процедуры Грама-Шмидта \cite{beklemishev1998}.
+
+Аналогичным образом найдем скалярное произведение $\left(\frac{1}{\varkappa} \vec\Omega\nabla \psi_{i,k}, \frac{1}{\varkappa}\vec\Omega\nabla\psi_{i',k'}\right)$:
+\begin{multline*}
+\left(\frac{1}{\varkappa} \vec\Omega\nabla \psi_{i,k}, \frac{1}{\varkappa}\vec\Omega\nabla\psi_{i',k'}\right) = \iint\limits_{G \times 4\pi} 
+\frac{1}{\varkappa(\vec r)} \Omega_\alpha \nabla_\alpha\phi_i(\vec r) \theta_k(\vec \Omega) \Omega_\beta \nabla_\beta\phi_{i'}(\vec r)  \theta_{k'}(\vec \Omega) d\vec r d\Omega = \\ =
+\int\limits_{4\pi} \Omega_\alpha \Omega_\beta\theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega
+\int\limits_G \frac{1}{\varkappa(\vec r)} \left[\nabla_\alpha \phi_i(\vec r)\right] \left[\nabla_\beta \phi_{i'}(\vec r)\right] d\vec r.
+\end{multline*}
+Обозначим интеграл от угловых функций через $\mathscr{K}^{\alpha\beta}_{kk'}$:
+\[
+\mathscr{K}^{\alpha\beta}_{kk'} \equiv \int\limits_{4\pi} \Omega_\alpha \Omega_\beta \theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega.
+\]
+
+То же самое проделаем с интегралом
+%\begin{multline*}
+\[
+\iint\limits_{\partial G \times 4\pi} |(\vec \Omega \vec n)| \psi_{i,k}\psi_{i',k'} d\Omega d \Gamma = 
+\int\limits_{\partial G} \left[\int\limits_{4\pi} \left|\big(\vec \Omega \vec n(\vec r)\big)\right|
+\theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega\right] \phi_i(\vec r) \phi_{i'}(\vec r) d\Gamma
+\]
+%\end{multline*}
+В отличие от двух предыдущих случаев данный интеграл не представляется в виде произведения двух интегралов от угловой и пространственной части, так как вектор нормали $\vec n$ зависит от положения точки $\vec r$ на границе $\partial G$. Обозначим величину в квадратных скобках через $\mathscr{B}_{kk'}(\vec n)$:
+\[
+\mathscr{B}_{kk'}(\vec n) = \int\limits_{4\pi} \left|\big(\vec \Omega \vec n\big)\right|
+\theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega.
+\]
+Пользуясь четностью угловых функций $\theta_k(\vec \Omega)$ это выражение можно записать в эквивалентной форме
+\[
+\mathscr{B}_{kk'}(\vec n) = \int\limits_{(\vec \Omega \vec n) > 0} \big(\vec \Omega \vec n\big)
+\theta_k(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega.
+\]
+
+В случае, если граница области $\partial G$ состоит из небольшого количества многоугольников (например, $G$ --- куб), существует лишь несколько различных вариантов для матрицы $\mathscr{B}_{kk'}$. К тому же, данные матрицы совпадают для нормалей, отличающихся лишь знаком.
+
+Найдем также выражение для линейного слагаемого в функционале $\mathcal{G}(\varphi)$:
+\begin{multline*}
+(\psi_{i,k}, I_\text{p}) = \iint\limits_{G \times 4\pi} \varkappa(\vec r) \phi_i(\vec r) \theta_k(\vec \Omega) I_\text{p} (\vec r, \vec \Omega) d\vec r d\vec \Omega = \\ =
+\int\limits_{G} \varkappa(\vec r) \phi_i(\vec r) \left[
+\int\limits_{4\pi} \theta_k(\vec \Omega) I_\text{p}(\vec r, \vec \Omega) d\Omega
+\right] d\vec r
+\end{multline*}
+и обозначим
+\[
+\mathscr{R}_{k}(\vec r) = \int\limits_{4\pi} \theta_k(\vec \Omega) I_\text{p}(\vec r, \vec \Omega) d\Omega.
+\]
+
+Принимая правило суммирования по повторяющемуся индексу, задача минимизации может быть записана в следующем дискретизированном по угловой переменной виде
+\begin{multline*}
+\mathscr H_{kk'} \int\limits_{G} \varkappa \varphi_k \varphi_{k'} d\vec r +
+\mathscr K_{kk'}^{\alpha\beta} \int\limits_{G} \frac{1}{\varkappa} [\nabla_\alpha \varphi_{k}] [\nabla_\beta \varphi_{k'}] d\vec r +
+\int\limits_{\partial G} \mathscr B_{kk'}(\vec n) \varphi_{k}\varphi_{k'} d\Gamma - \\ - 2 \int\limits_{G}
+\varkappa \varphi_k \mathscr{R}_k d\vec r \to \min_{\varphi_k}.
+\end{multline*}
+
+Данная задача соответствует вариационной постановке для системы из $K = \operatorname{dim} \left\{\theta_k(\vec \Omega)\right\}$ связанных эллиптических уравнений для функций $\varphi_k(\vec r)$.
+
+\subsection{Пространственная дискретизация}
+
+Функции $\varphi_k(\vec r)$ и, как следствие, $\phi_i(\vec r)$ должны принадлежать классу функций, имеющих обобщенную первую производную, так как
+\[
+\mathcal{H}_0 \subset \mathfrak{H}_0 \subset H^1(G).
+\]
+
+Пусть в области $G$ построена триангуляция $\mathcal{T} = \left\{T_i\right\}_{i=1}^N$:
+\[
+G = \bigcup_{i=1}^{N} T_i, \quad T_i \cap T_j = \partial T_i \cap \partial T_j, \; i \neq j.
+\]
+Потребуем, чтобы $\varphi_k(\vec r)$ были линейными функциями координат $\vec r$ в каждом элементе триангуляции $T_j$. Тогда требование $\varphi_k(\vec r) \in H^1(G)$ накладывает на $\varphi_k(\vec r)$ дополнительно требование непрерывности. Таким образом, $\varphi_k(\vec r)$ --- кусочно линейные функции координат $\vec r$, причем на каждом элементе $T_j$ функция является линейной. Такие функции однозначно восстанавливаются по своим значениям в узлах триангуляции. При этом функции $\phi_i(\vec r)$ можно определить как кусочно-линейные функции с минимальным носителем, удовлетворяющие условию $\phi_i(\vec r_i) = 1$. При этом носитель функции $\phi_i(\vec r)$ равен
+\[
+\operatorname{supp} \phi_i(\vec r) = \bigcup_{T_j \ni \vec r_i } T_j.
+\]
+При таком определение коэффициенты $\varphi_{i,k}$ в разложении
+\[
+\varphi_k(\vec r) = \sum_{i} \varphi_{i,k} \phi_i(\vec r)
+\]
+приобретают смысл значений функции $\varphi_k(\vec r)$ в точках $\vec r_i$.
+
+Построим явное выражение для оператора линейной системы
+\[
+[\mathcal{A} \varphi]_{i,k} \equiv [\phi_i(\vec r)\theta_k(\vec \Omega), \varphi(\vec r, \vec \Omega)].
+\]
+Пользуясь введенными ранее обозначениями
+\begin{equation}
+\begin{aligned}
+[\mathcal{A} \varphi]_{i,k} &= \mathscr H_{kk'} \int\limits_{G} \varkappa \phi_i \varphi_{k'} d\vec r + {}\\
+&{}+ \mathscr K_{kk'}^{\alpha\beta} \int\limits_{G} \frac{1}{\varkappa} [\nabla_\alpha \phi_{i}] [\nabla_\beta \varphi_{k'}] d\vec r +{}\\
+&{}+ \int\limits_{\partial G} \mathscr B_{kk'}(\vec n) \phi_{i}\varphi_{k'} d\Gamma.
+\end{aligned}
+\label{eq:operator}
+\end{equation}
+При этом правая часть системы $f_{i,k}$ вычисляется как
+\begin{equation}
+f_{i,k} = (\psi_{i,k}, I_\text{p}) = \int\limits_{G} \phi_i(\vec r) \mathscr R_k(\vec r) d\vec r.
+\label{eq:rhs}
+\end{equation}
+Заметим, что в выражениях \eqref{eq:operator} и \eqref{eq:rhs} интегрирование по всей области $G$ можно заменить на интегрирование по носителю функции $\phi_i(\vec r)$. В свою очередь, носитель данной функции состоит из нескольких сеточных элементов, окружающих узел $\vec r_i$. Учитывая этот факт, запишем оператор в виде
+\begin{equation}
+\begin{aligned}
+[\mathcal{A} \varphi]_{i,k} &= \mathscr H_{kk'} \sum_{T_j \ni \vec r_i}\;\int\limits_{T_j} \varkappa \phi_i \varphi_{k'} d\vec r + {}\\
+&{}+ \mathscr K_{kk'}^{\alpha\beta} \sum_{T_j \ni \vec r_i}\;\int\limits_{T_j} \frac{1}{\varkappa} [\nabla_\alpha \phi_{i}] [\nabla_\beta \varphi_{k'}] d\vec r + {}\\
+&{}+ \sum_{T_j \ni \vec r_i} \;\int\limits_{\partial G \cap T_j} \mathscr B_{kk'}(\vec n) \phi_{i}\varphi_{k'} d\Gamma\\
+f_{i,k} &= \sum_{T_j \ni \vec r_i}\;\int\limits_{T_j} \phi_i(\vec r) \mathscr R_k(\vec r) d\vec r
+\end{aligned}
+\label{eq:operator2}
+\end{equation}
+
+Для того, чтобы вычислить результат применения оператора $\mathcal{A}$ к $\varphi$, достаточно уметь вычислять интегралы по элементам триангуляции $T_j$ от произведения линейных функций и констант.
+
 \section{Квадратурные формулы для вычисления пространственных интегралов}
+При практическом вычислении функционала $\mathcal{G}(\cdot)$ от кусочно-линейной функции необходимо многократно вычислять
+интегралы вида
+\begin{equation}
+\int\limits_T \varkappa \gamma(\vec r) d \vec r, \quad \gamma(\vec r) = \gamma_1(\vec r)\gamma_2(\vec r),\quad \gamma_{1,2}(\vec r) \in \mathcal{P}_1(T),
+\label{eq:vol1}
+\end{equation}
+когда $T = \operatorname{conv}(\vec r_1,\vec r_2,\vec r_3,\vec r_4)$ --- тетраэдр, а функции $\gamma_{1,2}$ заданы своими значениями в его вершинах. 
+Будем искать точную квадратурную формулу для \eqref{eq:vol1}
+в виде
+\begin{equation}
+\int\limits_T \varkappa \gamma(\vec r) d \vec r = \varkappa V \left(w_1 \sum_{j=1}^4 \gamma(\vec r_j) + w_2 \gamma(\vec r_c)\right),
+\quad \vec r_c = \frac{\sum_{j=1}^4 \vec r_j}{4}
+\label{eq:quad1}
+\end{equation}
+Достаточно проверить, что формула \eqref{eq:quad1} точно интегрирует функции $\gamma \equiv 1$ и $\gamma = (\vec r - \vec r_c)^2$ в правильном тетраэдре.
+Первое условие дает $4w_1 + w_2 = 1$, а второе $w_1 = \frac{1}{20}$. При этом $w_2 = \frac{4}{5}$.
+\begin{equation}
+\int\limits_T \varkappa \gamma(\vec r) d \vec r = \varkappa V \left(\frac{1}{20} \sum_{j=1}^4 \gamma(\vec r_j) + \frac{4}{5} \gamma(\vec r_c)\right).
+\label{eq:quad1n2}
+\end{equation}
+Пусть $\gamma_1 = \phi^q$. Тогда $\gamma_1(\vec r_j) = \delta_j^q$
+\begin{equation}
+\int\limits_T \varkappa \phi^q \gamma_2(\vec r) d \vec r = \frac{\varkappa V}{20} \left(\sum_{j=1}^4\gamma_2(\vec r_j) + \gamma_2(\vec r^q) \right).
+\label{eq:quad1n3}
+\end{equation}
+В последней формуле учтено, что $\phi^q(\vec r_c) = \frac{1}{4}, \gamma_2(\vec r_c) = \frac{1}{4}\sum_{j=1}^4 \gamma_2(\vec r_j)$. Также отметим, что
+$\varkappa$ и $V$ входят в формулу в виде произведения $\varkappa V$.
+
+Перейдем к интегралу
+\begin{equation}
+\int\limits_T \frac{1}{\varkappa} \nabla_\alpha\gamma_1(\vec r)\nabla_\beta\gamma_2(\vec r) d \vec r, \quad \gamma_{1,2}(\vec r) \in \mathcal{P}_1(T),
+\label{eq:vol2}
+\end{equation}
+Поскольку функции $\gamma_{1,2}$ линейны, их производные являются просто некоторыми константами.
+\begin{equation}
+\int\limits_T \frac{1}{\varkappa} \nabla_\alpha\gamma_1(\vec r)\nabla_\beta\gamma_2(\vec r) d \vec r = 
+\frac{V}{\varkappa} \nabla_\alpha\gamma_1(\vec r)\nabla_\beta\gamma_2(\vec r)
+\label{eq:quad2}
+\end{equation}
+Пусть $\gamma_1(\vec r) = \phi^q(\vec r)$. Градиент $\phi^q$ направлен вдоль высоты, опущенной из вершины $\vec r^q$ на основание тетраэдра.
+Модуль градиента $|\operatorname{grad} \phi_q|$ равен $\frac{1}{h}$, где $h$ --- длина высоты. Учитывая, что объем $V$, длина высоты $h$ и площадь
+основания $S$ связаны соотношением $V = \frac{1}{3}S h$, можно заключить, что
+\begin{equation}
+\operatorname{grad} \phi^q = -\frac{S^q\vec n^q}{3V},
+\label{eq:grad}
+\end{equation}
+где $\vec n^q$ --- внешняя нормаль к грани, противоположной вершине $\vec r^q$, $S^q$ --- площадь этой грани. 
+Обозначим\footnote{В этом подразделе под $\vec S$ будет подразумеваться векторная площадь, а не вектор Пойтинга} 
+$\vec S^q \equiv S^q \vec n^q$. Данный вектор по модулю равен площади грани и направлен вдоль ее внешней нормали. Таким образом,
+\begin{equation}
+\nabla_\alpha \phi^q = -\frac{\vec S^q_\alpha}{3V},
+\label{eq:nabla}
+\end{equation}
+Разложим $\gamma_2(\vec r)$ по базисным функциям $\phi$:
+\begin{align}
+\gamma_2(\vec r) = \sum_{j=1}^4 \phi^j(\vec r) \gamma_2^j\\
+\nabla_\beta\gamma_2(\vec r) = \sum_{j=1}^4 \nabla_\beta\phi^j(\vec r) \gamma_2^j = - \sum_{j=1}^4 \frac{\gamma_2^j\vec S^j_\beta}{3V}
+\label{eq:nabla2}
+\end{align}
+Воспользуемся этой формулой для вычисления интеграла
+\begin{equation}
+J_{\alpha\beta} = \int\limits_T \frac{1}{\varkappa} \nabla_\alpha \phi^q(\vec r) \nabla_\beta \gamma_2(\vec r) d\vec r = 
+\frac{V}{\varkappa} \frac{\vec S^q_\alpha}{3V}\sum_{j=1}^4 \frac{\gamma_2^j\vec S^j_\beta}{3V} = 
+\frac{1}{9\varkappa V} \vec S_\alpha^q\sum_{j=1}^4 \gamma_2^j\vec S_\beta^j
+\label{eq:int2}
+\end{equation}
+Отметим, что и в этот интеграл $\varkappa$ и $V$ входят в виде произведения $\varkappa V$. Тензор $J_{\alpha\beta}$ 
+является тензорным произведением двух векторов $\xi_\alpha \eta_\beta$, причем $\xi_\alpha$ зависит только от точки $\vec r^q$ и 
+тетраэдра $T$, но не зависит от углового индекса $k$.
+Это обстоятельство также упрощает алгоритм вычислений.
+
 \section{Квадратурные формулы для вычисления угловых интегралов}
+
+\subsection{Построение квадратурной формулы для полусферы}
 
 \section{Решение линейной системы}
 
