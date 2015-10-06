@@ -1,1 +1,220 @@
-\chapter{прилб} 
+\chapter{Сферические функции}
+\label{chap:spher}
+
+\section{Сферические функции, используемые в работе}
+
+В работе были использованы действительные сферические функции, образующие ортонормированную систему по отношению
+к скалярному произведению $(\varphi, \psi) = \frac{1}{4\pi} \int \varphi \psi d\Omega$. Они имеют следующее представление
+\begin{align*}
+Y_{l,m}(\theta, \varphi) &= C_{l,m}P_l^{m}(\cos \theta)\times
+\begin{cases}
+\sin |m| \varphi,&\, m<0\\
+\frac{1}{\sqrt{2}},&\, m=0\\
+\cos m \varphi,&\, m>0\\
+\end{cases}
+\label{eq:sphfunc}\\
+C_{l,m} &= (-1)^{\frac{|m|+m}{2}}\sqrt{4l+2}\sqrt{\frac{(l-m)!}{(l+m)!}},
+\end{align*}
+где $P^m_l(\mu)$ --- присоединенный многочлен Лежандра степени $l$ и порядка $m$.
+
+Сферические функции могут быть выражены как однородные многочлены от компонент $\vec \Omega$. Представление нескольких первых 
+функций приведено ниже:
+\begin{align*}
+Y_{0,0} &= 1\\
+Y_{1,-1} = \sqrt{3}\Omega_y,\quad
+Y_{1,0} &= \sqrt{3}\Omega_z,\quad
+Y_{1,1} = \sqrt{3}\Omega_x\\
+Y_{2,-2} = \sqrt{15}\Omega_x\Omega_y,\quad
+Y_{2,-1} &= \sqrt{15}\Omega_y\Omega_z, \quad
+Y_{2,1} = \sqrt{15}\Omega_x\Omega_z\\
+Y_{2,0} = \sqrt{5}\Omega_z^{2}&-\frac{\sqrt{5}}{2}\Omega_y^{2}-\frac{\sqrt{5}}{2}\Omega_x^{2}\\
+Y_{2,2} = \frac{\sqrt{15}}{2}\Omega_x^{2}&-\frac{\sqrt{15}}{2}\Omega_y^{2}
+\end{align*}
+
+\section{Правила отбора для интеграла от трех действительных сферических функций}
+
+Рассмотрим следующий интеграл
+\[
+\begin{bmatrix}
+l_1 & l_2 & l_3\\
+m_1 & m_2 & m_3
+\end{bmatrix} \equiv
+\int\limits_{4\pi}
+Y_{l_1,m_1}(\vec \Omega)
+Y_{l_2,m_2}(\vec \Omega)
+Y_{l_3,m_3}(\vec \Omega)
+d\Omega.
+\]
+Без ограничений общности, предположим, что $l_1 \leq l_2 \leq l_3$.
+Найдем необходимые условия, при которых он отличен от нуля. Учтем, что сферические функции допускают представление
+\[
+Y_{l,m}(\vec \Omega) = C_{l,m} P_l^{m}(\cos \theta) \Phi_m(\varphi),
+\]
+а, следовательно, рассматриваемый интеграл может быть записан как
+\begin{multline*}
+\begin{bmatrix}
+l_1 & l_2 & l_3\\
+m_1 & m_2 & m_3
+\end{bmatrix} =
+C_{l_1,m_1}
+C_{l_2,m_2}
+C_{l_3,m_3} \times \\ \times
+\int\limits_{-1}^1 
+P_{l_1}^{m_1}(\mu)
+P_{l_2}^{m_2}(\mu)
+P_{l_3}^{m_3}(\mu)
+d\mu
+\int\limits_{0}^{2\pi}
+\Phi_{m_1}(\varphi)
+\Phi_{m_2}(\varphi)
+\Phi_{m_3}(\varphi)
+d\varphi
+\end{multline*}
+Для интеграла
+\[
+\int\limits_{-1}^1 
+P_{l_1}^{m_1}(\mu)
+P_{l_2}^{m_2}(\mu)
+P_{l_3}^{m_3}(\mu)
+d\mu
+\]
+известны \cite{Gaunt1929} правила отбора, которые заключаются в том, что интеграл не равен нулю только если выполнены следующие предположения:
+\begin{itemize}
+\item сумма степеней $l_1 + l_2 + l_3$ четна;
+\item степени удовлетворяют неравенству треугольника $l_3 < l_1 + l_2$.
+\end{itemize}
+
+Для интеграла 
+\[
+\int\limits_{0}^{2\pi}
+\Phi_{m_1}(\varphi)
+\Phi_{m_2}(\varphi)
+\Phi_{m_3}(\varphi)
+d\varphi
+\]
+рассмотрим возможные случаи.
+\paragraph{Случай $m_1 = 0$.} Поскольку $\Phi_0(\varphi) = \frac{1}{\sqrt{2}}$, интеграл сводится к 
+\[
+\int\limits_{0}^{2\pi}
+\Phi_{m_2}(\varphi)
+\Phi_{m_3}(\varphi)
+d\varphi,
+\]
+который отличен от нуля только при $m_2 = m_3$.
+\paragraph{Случай $m_1 \leq m_2 \leq m_3 < 0$.} Интеграл представим в виде
+\begin{multline*}
+-\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\sin m_2 \varphi
+\sin m_3 \varphi
+d\varphi = \\ 
+= 
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\cos (m_2 + m_3) \varphi
+d\varphi 
+-
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\cos (m_3 - m_2) \varphi
+d\varphi.
+\end{multline*}
+Оба интеграла равны нулю. 
+
+\paragraph{Случай $m_1 \leq m_2 < 0 < m_3$.} Интеграл представим в виде
+\begin{multline*}
+\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\sin m_2 \varphi
+\cos m_3 \varphi
+d\varphi = \\ 
+= 
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\cos (m_2 - m_1) \varphi
+\cos m_3 \varphi
+d\varphi 
++
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\cos (m_1 + m_2) \varphi
+\cos m_3 \varphi
+d\varphi.
+\end{multline*}
+Интеграл отличен от нуля если $m_3 = m_2 - m_1$ либо $m_3 = -m_1 - m_2$.
+
+\paragraph{Случай $m_1 < 0 < m_2 \leq m_3$.} Интеграл представим в виде
+\begin{multline*}
+-\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\cos m_2 \varphi
+\cos m_3 \varphi
+d\varphi = \\ 
+= 
+-\frac{1}{2}\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\cos (m_2 + m_3) \varphi
+d\varphi 
+-
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\sin m_1 \varphi
+\cos (m_2 - m_3) \varphi
+d\varphi.
+\end{multline*}
+Оба интеграла равны нулю. 
+
+\paragraph{Случай $0 < m_1 \leq m_2 \leq m_3$.} Интеграл представим в виде
+\begin{multline*}
+\int\limits_{0}^{2\pi}
+\cos m_1 \varphi
+\cos m_2 \varphi
+\cos m_3 \varphi
+d\varphi = \\ 
+= 
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\cos m_1 \varphi
+\cos (m_2 + m_3) \varphi
+d\varphi 
++
+\frac{1}{2}\int\limits_{0}^{2\pi}
+\cos m_1 \varphi
+\cos (m_2 - m_3) \varphi
+d\varphi.
+\end{multline*}
+Интеграл отличен от нуля только если $m_1 + m_2 = m_3$ (случай $m_1 = m_2 + m_3$ невозможен, т.к. $m_3 \geq m_1, m_2 > 0$).
+
+Подытожим, интеграл 
+\[
+\int\limits_{0}^{2\pi} \Phi_{m_1}(\varphi)\Phi_{m_2}(\varphi)\Phi_{m_3}(\varphi) d\varphi, \quad 
+m_1 \leq m_2 \leq m_3,
+\]
+отличен от нуля только если
+\begin{itemize}
+\item одно из чисел $m_1, m_2, m_3$ равно нулю, а остальные равны между собой;
+\item либо $m_1, m_2, m_3 > 0$ и $m_3 = m_1 + m_2$;
+\item либо $m_1, m_2 < 0, m_3 > 0$, при этом либо $m_1 + m_2 + m_3 = 0$, либо $m_1 - m_2 + m_3 = 0$.
+\end{itemize}
+В совокупности с правилами отбора для степеней $l_1, l_2, l_3$
+\begin{itemize}
+\item сумма степеней $l_1 + l_2 + l_3$ четна;
+\item степени удовлетворяют неравенству треугольника $l_3 < l_1 + l_2$,
+\end{itemize}
+эти требования составляют правила отбора для интеграла
+\[
+\begin{bmatrix}
+l_1 & l_2 & l_3\\
+m_1 & m_2 & m_3
+\end{bmatrix} \equiv
+\int\limits_{4\pi}
+Y_{l_1,m_1}(\vec \Omega)
+Y_{l_2,m_2}(\vec \Omega)
+Y_{l_3,m_3}(\vec \Omega)
+d\Omega.
+\]
+
+\section{Матрица
+\texorpdfstring{$\mathscr{K}^{\alpha\beta}_{kk'}$}{K^ab\_kk'}
+приближения \texorpdfstring{$n = 1$}{n = 1}}
+
+Для иллюстрации разреженной структуры матрицы, приведен вариант при $n = 2$. Блоки соответствуют следующей нумерации сферических гармоник: 
+$\varphi_{0,0}\quad \varphi_{2,-2}\quad \varphi_{2,-1}\quad \varphi_{2,0}\quad \varphi_{2,1}\quad \varphi_{2,2}$
+
+\input{oioj}
