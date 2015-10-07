@@ -100,6 +100,39 @@
 \end{multline*}
 
 Данная задача соответствует вариационной постановке для системы из $K = \operatorname{dim} \left\{\theta_k(\vec \Omega)\right\}$ связанных эллиптических уравнений для функций $\varphi_k(\vec r)$.
+В данной работе рассматривались два типа базисов $\theta_k(\vec \Omega)$, а именно:
+\begin{itemize}
+\item базис из действительных сферических функций $Y_{l,m}(\vec \Omega)$ четной степени (см. приложение \ref{chap:spher});
+\item базис из радиальных функций
+\[
+R_i(\vec \Omega) = \exp(-\epsilon_i||\vec \Omega - \vec \omega_i||^2) + \exp(-\epsilon_i||\vec \Omega + \vec \omega_i||^2).
+\]
+\end{itemize}
+Название <<радиальные>> отражает тот факт, что функции $R_i(\vec \Omega)$ зависят лишь от расстояния от точки $\vec \Omega$ до точек $\pm \vec \omega_i$ на единичной сфере направлений.
+Функции $R_k(\vec \Omega)$ схематически представлены на рисунке \ref{fig:rbf}. Для определения этих функций необходимо задать набор направлений $\vec \omega_i$, а также весовые множители $\epsilon_i$. 
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=.25\textwidth]{rbf-0.eps}
+\caption{Вид радиальной базисной функции $R_i(\vec \Omega)$}
+\label{fig:rbf}
+\end{figure}
+
+Рассмотрим некоторую квадратурную формулу для интеграла
+\[
+\int\limits_{4\pi} f(\vec \Omega) d\Omega \approx \sum_{i=1}^K w_i \frac{f(\vec \omega_i) + f(-\vec \omega_i)}{2}
+\]
+Тогда узлы квадратурной формулы $\vec \omega_i$ могут быть использованы в качестве набора направлений для задания базиса из радиальных функций. Величина $\epsilon_i$ обратно пропорциональна площади характерного носителя функции $R_i(\vec \Omega)$, поэтому принимается, что эта величина обратно пропорциональна весу направления в квадратурной формуле:
+\[
+\epsilon_i \sim \frac{1}{w_i}.
+\]
+Базис из радиальных функций не обладает свойством разложения единицы, то есть в нем невозможно представить
+\[
+1 = \sum_{k = 1}^{K} c_k R_k(\vec \Omega)
+\]
+ни для каких коэффициентов $c_k$. Исходя из этого, коэффициент пропорциональности между $\epsilon_i$ и $\frac{1}{w_i}$ выбирается из соображений наилучшего приближения единицы в этом базисе. Так как для произвольной квадратурной формулы на сфере эта задача весьма сложна, она была решена на плоскости в предположении, что $\vec \omega_i$ расположены в вершинах равномерной треугольной сетки. При этом
+\[
+\epsilon_i = \frac{9\sqrt{3}}{8w_i}.
+\]
 
 \subsection{Пространственная дискретизация}
 
@@ -154,10 +187,11 @@ f_{i,k} &= \sum_{T_j \ni \vec r_i}\;\int\limits_{T_j} \phi_i(\vec r) \mathscr R_
 Для того, чтобы вычислить результат применения оператора $\mathcal{A}$ к $\varphi$, достаточно уметь вычислять интегралы по элементам триангуляции $T_j$ от произведения линейных функций и констант.
 
 \section{Квадратурные формулы для вычисления пространственных интегралов}
+\label{sec:quad}
 
 \subsection{Интеграл по тетраэдру от произведения линейных функций}
 
-При практическом вычислении действия оператора $\mathcal{A}(\cdot)$ на кусочно-линейную функцию $\varphi$ необходимо многократно вычислять
+При практическом вычислении действия оператора $\mathcal{A}$ на кусочно-линейную функцию $\varphi$ необходимо многократно вычислять
 интегралы вида
 \begin{equation}
 \int\limits_T \varkappa \gamma(\vec r) d \vec r, \quad \gamma(\vec r) = \gamma_1(\vec r)\gamma_2(\vec r),\quad \gamma_{1,2}(\vec r) \in \mathcal{P}_1(T),
@@ -194,6 +228,27 @@ w_1 = \frac{1}{20}.
 \end{equation}
 В последней формуле учтено, что $\phi_q(\vec r_c) = \frac{1}{4}, \gamma_2(\vec r_c) = \frac{1}{4}\sum_{j=1}^4 \gamma_2(\vec r_j)$. Также отметим, что
 $\varkappa$ и $V$ входят в формулу только в виде произведения $\varkappa V$.
+
+\subsection{Интеграл по треугольнику от произведения линейных функций}
+
+Для вычисления интегралов
+\[
+\int_{Q} \gamma(\vec r) dS, \quad \gamma(\vec r) = \gamma_1(\vec r)\gamma_2(\vec r), \quad \gamma_{1,2} \in \mathcal{P}_1(T),
+\]
+когда $T = \operatorname{conv}(\vec r_1, \vec r_2, \vec r_3)$ --- треугольник, возникающих при вычислении интегралов для поверхностной части оператора $\mathcal{A}$, также можно построить квадратурную формулу в виде
+\[
+\int_{Q} \gamma(\vec r) dS = S \left(w_1 \sum_{j = 1}^3 \gamma(\vec r_j) + w_2 \gamma(\vec r_c)\right), \qquad \vec r_c = \frac{\sum_{j=1}^3 \vec r_j}{3}.
+\]
+Аналогично предыдущему пункту, проверим точность формулы на инвариантных симметрических многочленах $\gamma = 1$ и $\gamma = (\vec r - \vec r_c)^2$. Из первого условия следует, что
+$3w_1 + w_2 = 1$, а из второго --- $w_1 = \frac{1}{12}$, то есть искомая формула имеет вид
+\[
+\int_{Q} \gamma(\vec r) dS = S \left(\frac{1}{12} \sum_{j = 1}^3 \gamma(\vec r_j) + \frac{3}{4} \gamma(\vec r_c)\right).
+\]
+Подставляя $\gamma_1(\vec r) = \phi_q(\vec r)$, получаем
+\[
+\int_{Q} \phi_q(\vec r)\gamma_2(\vec r) dS = \frac{S}{12} \left( \gamma_2(\vec r_q) + \sum_{j=1}^3 \gamma_2(\vec r_j)\right).
+\]
+В последней формуле учтено, что $\phi_q(\vec r_c) = \frac{1}{3}, \gamma_2(\vec r_c) = \frac{1}{3}\sum_{j=1}^3\gamma_2(\vec r_j)$.
 
 \subsection{Интеграл по тетраэдру от произведения градиентов линейных функций}
 
@@ -317,8 +372,7 @@ w_j = w_{n-j}, \qquad \theta_j = \frac{\pi}{2} - \theta_{n - j}.
 Пользуясь теоремой Соболева, достаточно потребовать от квадратурной формулы точного интегрирования многочленов
 $Q(\sin \varphi, \cos \varphi)$, инвариантных относительно замены $\varphi \to \frac{\pi}{2} - \varphi$, или, что то же самое, перестановки аргументов. 
 
-Обозначим $r = \sin \theta, z = \cos \theta$. Пусть $S(r, z)$ --- симметричный многочлен степени $n$. Тогда по основной теореме о симметрических многочленах \cite{symm}, $S(r,z)$ является многочленом от 
-элементарных симметрических многочленов $e_1 = r + z$ и $e_2 = r z$, то есть
+Обозначим $r = \sin \theta, z = \cos \theta$. Пусть $S(r, z)$ --- симметричный многочлен степени $n$. Тогда по основной теореме о симметрических многочленах \cite{symm}, $S(r,z)$ является многочленом от элементарных симметрических многочленов $e_1 = r + z$ и $e_2 = r z$, то есть
 \[
 S(r, z) = \sum_{0 \leq i + 2j \leq n} s_{ij} (r + z)^i (r z)^{j}.
 \]
@@ -505,13 +559,21 @@ W_{2n}(\xi) \frac{(1 - \xi^2)^2 - 4\xi^2}{(1 + \xi^2)^{n+3}} d\xi.
 
 Матрица системы может быть представлена в блочном виде, где каждый блок содержит пространственную дискретизацию некоторого скалярного эллиптического оператора. Пользуясь кронекеровским произведением, объемная часть матрицы $\mathcal{A}$ может быть записана как
 \[
-\mathcal{A}^\text{объёмн} = \mathscr{H} \otimes M + \sum_{\alpha,\beta} \mathscr{K}^{\alpha\beta} \otimes S_{\alpha,\beta}.
+\mathcal{A}^\text{объёмн} = \mathscr{H} \otimes M + \sum_{\alpha,\beta} \mathscr{K}^{\alpha\beta} \otimes S_{\alpha\beta}.
 \]
 Если из матриц $\mathscr{H}, \mathscr{K}^{\alpha\beta}$ удалить внедиагональные элементы, то полученная матрица
-\[
+\begin{equation}
 \mathcal{M}^\text{объёмн} = \operatorname{diag}(\mathscr{H}) \otimes M + \sum_{\alpha,\beta}  \operatorname{diag}(\mathscr{K})^{\alpha\beta} \otimes S_{\alpha,\beta}
-\]
+\label{eq:precondop}
+\end{equation}
 будет соответствовать некоторой другой системе эллиптических уравнений, энергетически эквивалентной исходной. Заметим, что из-за блочно-диагональной структуры $\mathcal{M}$, она фактически соответствует набору из независимых скалярных эллиптических уравнений. Напротив, матрица $\mathcal{A}$ соответствовала связанной системе эллиптических уравнений.
+Обозначим $\mathcal{A}^{(k,k')}$ блок матрицы $\mathcal{A}$ с координатами $(k, k')$. Тогда
+\[
+\mathcal{M}^{(k,k')} = \begin{cases}
+\mathcal{A}^{(k,k)}, & k = k'\\
+0, &k \neq k'.
+\end{cases}
+\]
 
 Другая интерпретация процесса удаления внедиагональных блоков из матрицы $\mathcal{A}$ может быть дана в терминах минимизации функционала $\mathcal{G}$. Если решение системы с матрицей $\mathcal{A}$ эквивалентно решению задачи минимизации \eqref{eq:minimize}
 \[
@@ -521,13 +583,287 @@ W_{2n}(\xi) \frac{(1 - \xi^2)^2 - 4\xi^2}{(1 + \xi^2)^{n+3}} d\xi.
 \[
 \mathcal{G}(\varphi_{k}(\vec r) \theta_k(\vec \Omega)) \to \min_{\varphi_k(\vec r)}, \quad k = 1, \dots, K.
 \]
-отдельно для каждой гармоники $\varphi_k(\vec r)$.
+отдельно для каждой гармоники $\varphi_k(\vec r)$. 
+
+Стандартный предобусловленный вариант метода сопряженных градиентов приведен в алгоритме \ref{alg:precondcgs}, где в качестве предобуславливателя используется блочная диагональ матрицы $\mathcal {A}$.
+
+\begin{algorithm}[ht!]
+\centering
+\begin{algorithmic}[1]
+\Function{ConjugateGradients}{$\mathcal{A}$, $f$, $\varphi$, $tol = 10^{-8}$}
+\State $r = f - $ \Call{Product}{$\mathcal{A}$, $\varphi$}
+\State $resinit := ||r||^2$
+\For {$i = 1, \dots, K$} 
+\State $z_i := $ \Call{PreconditionerSolve}{$\mathcal{A}^{(i,i)}$, $r_i$}
+\EndFor
+\State $p = z$
+\State $rz = (r, z)$
+\Repeat
+\State $Ap := $ \Call{Product}{$\mathcal{A}$, $p$}
+\State $pAp := (p, Ap)$
+\State $\alpha := {rz}/{pAp}$
+\State $\varphi := \varphi + \alpha p$
+\State $r := r - \alpha Ap$
+\If {$||r||^2 < resinit \cdot tol^2$}
+\State \Return $\varphi$
+\EndIf
+\For {$i = 1, \dots, K$} 
+\State $z_i := $ \Call{PreconditionerSolve}{$\mathcal{A}^{(i,i)}$, $r_i$}
+\EndFor
+\State $rznew := (r, z)$
+\State $\beta := {rznew}/{rz}$
+\State $rz := rznew$
+\State $p := z + \beta p$
+\Until \textbf{false}
+\EndFunction
+\end{algorithmic}
+\caption{Предобусловленный метод сопряженных градиентов}
+\label{alg:precondcgs}
+\end{algorithm}
+
+В функции \textsc{PreconditionerSolve} также использовался метод сопряженных градиентов, но без предобуславливания. Для этой задачи подойдет любой метод, предназначенный для решения систем линейных уравнений, полученных в результате дискретизации эллиптических операторов вида
+\[
+-\div \frac{1}{\varkappa} \mathbb D \grad \phi + \varkappa \varphi.
+\]
+В данной работе изучалась сходимость именно внешних итераций, без учета сходимости самого процесса предобуславливания. 
 
 \section{Вычисление физических характеристик излучения}
 
-Для вычисления нечетных моментов интенсивности (вектора плотности потока энергии) применяется уравнение
+Достаточно часто для практических приложений необходима не сама функция интенсивности излучения $I(\vec x, \vec \Omega)$, а лишь ее интегральные характеристики --- плотность и поток энергии, тензор потока импульса и т. п. Рассмотрим обобщенный четный момент функции интенсивности
 \[
-\varkappa_\nu \vec S_\nu + c\div \mathbb T_\nu = \varkappa_\nu \vec S_{\nu,\text{p}}
+J_{\alpha\beta\dots\lambda}(\vec r) \equiv \int\limits_{4\pi} \Omega_\alpha \Omega_\beta \cdots \Omega_\lambda I(\vec r, \vec \Omega) d\Omega.
+\]
+В силу четности интеграла относительно замены $\vec \Omega \to -\vec \Omega$, подынтегральную функцию интенсивности можно заменить на ее четную часть $\varphi(\vec r, \vec \Omega)$:
+\[
+J_{\alpha\beta\dots\lambda}(\vec r) = \int\limits_{4\pi} \Omega_\alpha \Omega_\beta \cdots \Omega_\lambda \varphi(\vec r, \vec \Omega) d\Omega.
+\]
+Принимая во внимание разложение по угловым базисным функциям
+\[
+\varphi(\vec r, \vec \Omega) = \sum_{k = 1}^{K} \varphi_k(\vec r) \theta_k(\vec \Omega),
+\]
+получаем
+\[
+J_{\alpha\beta\dots\lambda}(\vec r) = \sum_{k=1}^{K} \Theta_k^{\alpha\beta\dots\lambda} \varphi_k(\vec r),
+\]
+где угловые моменты базисных функций $\Theta_k^{\alpha\beta\dots\lambda}$ определяются как
+\[
+\Theta_k^{\alpha\beta\dots\lambda} \equiv \int\limits_{4\pi} \Omega_\alpha \Omega_\beta \cdots \Omega_\lambda \theta_k(\vec \Omega) d\Omega.
+\]
+Например, 
+\begin{gather*}
+U(\vec r) \equiv \frac{1}{c}\int\limits_{4\pi} I(\vec r, \vec \Omega) d\Omega = \frac{1}{c} J(\vec r) = \frac{1}{c} \sum_{k=1}^{K} \Theta_k \varphi_k(\vec r)\\
+\mathbb T_{\alpha\beta}(\vec r) \equiv \frac{1}{c}\int\limits_{4\pi} \Omega_\alpha \Omega_\beta I(\vec r, \vec \Omega) d\Omega = \frac{1}{c} J_{\alpha\beta}(\vec r) = \frac{1}{c} \sum_{k=1}^{K} \Theta_k^{\alpha\beta} \varphi_k(\vec r).
+\end{gather*}
+Для базиса из радиальных функций $\theta_k(\vec \Omega) = R_k(\vec \Omega)$ значения $\theta_{k}^{\cdot}$ могут быть вычислены численным интегрированием с помощью квадратурной формулы Лебедева, а для базиса из сферических функций $\theta_k(\vec \Omega) = Y_{l,m}(\vec \Omega)$ эти выражения можно найти аналитически.
+
+Для плотности энергии излучения используются нулевые моменты базисных функций
+\[
+\Theta_k = \int\limits_{4\pi} \theta_k(\vec \Omega) d\Omega = 
+\int\limits_{4\pi} Y_{l,m}(\vec \Omega) d\Omega = 
+\begin{cases}
+4\pi, &l = 0\\
+0, &l \neq 0.
+\end{cases}
+\]
+Таким образом, для метода сферических гармоник
+\[
+U(\vec r) = \frac{4\pi}{c} \varphi_{0,0}(\vec r).
+\]
+
+Для тензора потока импульса излучения используются вторые моменты базисных функций
+\[
+\Theta_k^{\alpha\beta} = \int\limits_{4\pi} \Omega_{\alpha}\Omega_{\beta}\theta_k(\vec \Omega) d\Omega 
+= \int\limits_{4\pi} \Omega_{\alpha}\Omega_{\beta} Y_{l,m}(\vec \Omega) d\Omega.
+\]
+Заметим, что тензор $\Omega_\alpha\Omega_\beta$ является однородным многочленом второй степени относительно $\vec \Omega$, а, следовательно, раскладывается в линейную комбинацию функций $Y_{l,m}(\vec \Omega)$. 
+\begin{multline}
+%\begin{pmatrix}
+%\Omega_x^2 & \Omega_x \Omega_y & \Omega_x \Omega_z\\
+%\Omega_x \Omega_y & \Omega_y^2 & \Omega_y \Omega_z\\
+%\Omega_x \Omega_z & \Omega_y \Omega_z & \Omega_z^2
+%\end{pmatrix} = \\ =
+\Omega_\alpha\Omega_\beta = 
+\begin{pmatrix}
+\frac{1}{3}Y_{0,0} - \frac{\sqrt{5}}{15} Y_{2,0} + \frac{1}{\sqrt{15}}Y_{2,2}& \frac{1}{\sqrt{15}}Y_{2,-2} & \frac{1}{\sqrt{15}}Y_{2,1} \\
+\frac{1}{\sqrt{15}}Y_{2,-2} &\frac{1}{3}Y_{0,0} - \frac{\sqrt{5}}{15} Y_{2,0} - \frac{1}{\sqrt{15}}Y_{2,2} & \frac{1}{\sqrt{15}}Y_{2,-1}\\
+\frac{1}{\sqrt{15}}Y_{2,1} & \frac{1}{\sqrt{15}}Y_{2,-1} & \frac{2\sqrt{5}}{15}Y_{2,0} + \frac{1}{3}Y_{0,0}
+\end{pmatrix}
+\label{eq:oaob}
+\end{multline}
+Пользуясь ортогональностью функций $Y_{l,m}$, получаем
+\begin{alignat*}{5}
+&\Theta^{\alpha\beta}_{0,0} &= \frac{4\pi}{3}\begin{pmatrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{pmatrix}\qquad
+&\Theta^{\alpha\beta}_{2,-2} &&= \frac{4\pi}{\sqrt{15}}\begin{pmatrix}
+0 & 1 & 0\\
+1 & 0 & 0\\
+0 & 0 & 0
+\end{pmatrix}\\
+&\Theta^{\alpha\beta}_{2,-1} &= \frac{4\pi}{\sqrt{15}}\begin{pmatrix}
+0 & 0 & 0\\
+0 & 0 & 1\\
+0 & 1 & 0
+\end{pmatrix}\qquad
+&\Theta^{\alpha\beta}_{2,0} &&= \frac{4\pi\sqrt{5}}{15}\begin{pmatrix}
+-1 & 0 & 0\\
+0 & -1 & 0\\
+0 & 0 & 2
+\end{pmatrix}\\
+&\Theta^{\alpha\beta}_{2,1} &= \frac{4\pi}{\sqrt{15}}\begin{pmatrix}
+0 & 0 & 1\\
+0 & 0 & 0\\
+1 & 0 & 0
+\end{pmatrix}\qquad
+&\Theta^{\alpha\beta}_{2,2} &&= \frac{4\pi}{\sqrt{15}}\begin{pmatrix}
+1 & 0 & 0\\
+0 & -1 & 0\\
+0 & 0 & 0
+\end{pmatrix}.
+\end{alignat*}
+Остальные $\Theta^{\alpha\beta}_{l,m}$ равны нулю, таким образом
+\[
+\mathbb T_{\alpha\beta}(\vec r) = \frac{1}{c}\left[
+\Theta^{\alpha\beta}_{0,0} \varphi_{0,0}(\vec r) + 
+\sum_{m=-2}^{2} \Theta^{\alpha\beta}_{2,m} \varphi_{2,m}(\vec r)
+\right].
+\]
+
+Для нахождения нечетных моментов интенсивности, например, потока энергии излучения $\vec S$
+\[
+\vec S \equiv \int\limits_{4\pi} \vec \Omega I(\vec r, \vec \Omega) d\Omega
+\]
+необходимо привлекать дифференциальное уравнение переноса \eqref{eq:transf2}.
+\[
+\frac{1}{\varkappa(\vec r)} \Omega_\alpha \nabla_\alpha I(\vec r, \vec \Omega) + I(\vec r, \vec \Omega) = I_\text{p}(\vec r, \vec \Omega).
+\]
+Интегрируя его с весом $\Omega_\beta\dots\Omega_\lambda$, получаем
+\[
+\frac{1}{\varkappa(\vec r)} \nabla_\alpha J_{\alpha\beta\dots\lambda}(\vec r) + 
+J_{\beta\dots\lambda}(\vec r) = 0.
+\]
+В последней формуле учтено, что $I_\text{p}$ --- четная по $\vec \Omega$ функция и ее нечетные моменты равны нулю. Таким образом, справедливо соотношение
+\[
+J_{\beta\dots\lambda}(\vec r) = -\frac{1}{\varkappa(\vec r)} \nabla_\alpha J_{\alpha\beta\dots\lambda}(\vec r),
+\]
+которое связывает нечетные моменты функции интенсивности с пространственными производными от четных моментов. Например, для $\vec S$ верно
+\[
+[\vec S]_\alpha(\vec r) = J_\alpha(\vec r) = -\frac{1}{\varkappa(\vec r)} \nabla_\beta J_{\alpha \beta}(\vec r) = -\frac{c}{\varkappa(\vec r)} \nabla_\beta \mathbb T_{\alpha\beta}(\vec r).
 \]
 
 \section{Реализация метода с использованием графических ускорителей}
+
+Численный метод был реализован в виде программы на языке C++ с использованием библиотеки CUDA для организации вычислений на графическом
+процессоре. Использовались трехмерные сетки, сгенерированные программой NETGEN v4.9.14 \cite{Netgen2009}.
+Для визуализации результатов применялась программа ParaView \cite{Paraview2004}.
+
+Самый трудоемкий этап при решении системы линейных алгебраических уравнений методом сопряженных градиентов --- это непосредственно
+этап вычисления по заданному вектору $\varphi$ результата действия на него оператора задачи
+$[\mathcal{A}\varphi]_{i,k} = [\phi_i(\vec r)\theta_k(\vec \Omega), \varphi(\vec r, \vec \Omega)]$. Оператор задачи можно разбить на 
+объемную и поверхностную части
+\begin{align*}
+[\mathcal{A}^\text{объемн} \varphi]_{i,k} &= \left(\phi_i\theta_k, \varphi\right) + 
+\left(\frac{1}{\varkappa}(\vec \Omega \nabla)\phi_i\theta_k, \frac{1}{\varkappa}(\vec \Omega \nabla)\varphi\right)\\
+[\mathcal{A}^\text{поверх} \varphi]_{i,k} &= \iint\limits_{\partial G \times 4\pi} \phi_i\theta_k \varphi d\Gamma d\Omega.
+\end{align*}
+В обозначениях \eqref{eq:operator2}
+\begin{align*}\nonumber
+[\mathcal{A}^\text{объемн} \varphi]_{i,k}  &= \sum_{k'} \mathscr{H}_{kk'}\sum_{T_j \ni \vec r_i}\int\limits_{T_j} \varkappa \phi_i \varphi_{k'} d\vec r +\\
+&+\sum_{k',\alpha,\beta} \mathscr{K}_{kk'}^{\alpha\beta}
+\sum_{T_j \ni \vec r_i}\int\limits_{T_j} \frac{1}{\varkappa} (\nabla_\alpha\phi_i)(\nabla_\beta\varphi_{k'}) d\vec r\\
+[\mathcal{A}^\text{поверх} \varphi]_{i,k} &= \sum_{T_j \ni \vec r_i}
+\sum_{k'}\mathscr{B}_{kk'}(\vec n)
+\int\limits_{\partial T_j \cap \partial G} 
+\phi_i \varphi_{k'} d\Gamma.
+\end{align*}
+
+В программной реализации сначала параллельно по гармоникам решения вычисляются пространственные интегралы.
+Это производится с помощью построенных в параграфе \ref{sec:quad} квадратурных формул. Квадратурные формулы удобны тем, что для вычисления интегралов достаточно знать лишь значения функции $\varphi_{k'}(\vec r)$ в вершинах тетраэдра и номер вершины тетраэдра, которому соответствует точка $\vec r_i$.
+Затем, полученные вектора значений умножается на матрицы $\mathscr{H}_{kk'}, \mathscr{K}_{kk'}^{\alpha\beta}, \mathscr{B}_{kk'}$.
+Последняя операция --- коллективная, и требует обмена данными между потоками. Более того, в архитектуре CUDA обмен данными 
+между потоками возможен только через специальную разделяемую память. Оценим объем необходимой разделяемой памяти для 
+вычисления решения в конкретной точке. В разделяемой памяти должно размещаться $3 \times 3 \times K$ величин типа 
+\textsf{double}. Учитывая ограничение в $\sim 48$ КБайт разделяемой памяти на каждый параллельный блок в архитектуре CUDA,
+получаем, что один такой блок может обрабатывать не более $K \sim 600$ направлений. При этом параллельный блок будет обрабатывать одну вершину $\vec r_i$. 
+Аппаратно это означает, что для вычисления всех гармоник $[\mathcal{A}^\text{объемн} \varphi]_{i,k}$ в точке $\vec r_i$ будет задействован целый мультипроцессор.
+Это довольно расточительно с точки зрения ресурсов, но необходимость во взаимодействии потоков с разными значениями $k'$ неизбежна.
+Заметим, что взаимодействие между разными гармониками решения отсутствует при вычислениях с диагональным эллиптическим оператором \eqref{eq:precondop}, что позволяет существенно быстрее решать задачу методом сопряженных градиентов для предобуславливателя.
+
+Вычисление пространственных частей оператора тоже создает некоторые трудности. В каждой точке необходимо вычислять сумму выражений
+по всем тетраэдрам или треугольникам, содержащим данную точку. Значит, номера этих тетраэдров и треугольников должны быть заранее 
+найдены и переданы в процедуру вычисления действия оператора $\mathcal A$ на вектор $\varphi$. Можно оценить объём памяти, занимаемый описанием пространственной 
+сетки вместе с этой вспомогательной информацией.
+
+Допустим, что сетка содержит $N$ точек. В каждой точке сходится порядка $20$ 
+тетраэдров\footnote{Телесный угол при вершине правильного тетраэдра равен $\arccos \frac{23}{27} \approx 0.551\text{ ср} \approx \frac{4\pi\text{ ср}}{23}$. }.
+Значит количество тетраэдров $N_t$ порядка $\frac{20N}{4} = 5N$. Это число хорошо согласуется с реальными сетками.
+
+В программе расчетная сетка хранится в следующей форме
+\begin{itemize}
+	\item $N_t \approx 5N$ структур размера $128$ байт, описывающих тетраэдры со следующими полями
+	\begin{itemize}
+	\item $4$ числа типа \textsf{unsigned int} --- номера вершин тетраэдра
+	\item $1$ число типа \textsf{double} --- произведение $\varkappa V$
+	\item $1$ число типа \textsf{double} --- равновесная интенсивность $I_\text{p}$
+	\item $12$ чисел типа \textsf{double} --- векторные площади четырех граней $\vec S^j_\alpha$
+	\end{itemize}
+	\item $\sim 20N$ пар чисел типа \textsf{unsigned int} --- номера тетраэдров, содержащих точку $\vec r_i$ и локальный номер вершины, совпадающей с $\vec r_i$
+\end{itemize}
+
+Размером аналогичных структур, описывающих граничные треугольники, пренебрежем. Суммарно расчетная сетка занимает порядка $800N$ байт.
+Заметим, что при этом вектор решения системы линейных уравнений занимает $8 K N$ байт, и для случая $K = 50$ это уже
+$400N$ байт. Учтем, что для реализации метода сопряженных градиентов необходимо четыре вектора такого размера, а для реализации
+метода сопряженных градиентов с предобуславливанием --- пять (для самого метода) и еще три (для самого предобуславливателя).
+Получается, что необходимый объем памяти определяется не сложной структурой расчетной сетки, а многомерностью вектора неизвестных и вспомогательных векторов.
+
+Для метода сферических гармоник матрица $\mathscr{H}_{kk'}^{\alpha\beta}$ является разреженной. Рассмотрим блок $3\times 3$ данной матрицы, имеющий координаты $(k,k')$:
+\[
+\mathscr{H}_{kk'}^{\alpha\beta} \equiv \int\limits_{4\pi} \Omega_\alpha\Omega_\beta \theta_{k}(\vec \Omega) \theta_{k'}(\vec \Omega) d\Omega.
+\]
+Ранее было показано, что $ \Omega_\alpha\Omega_\beta$ выражается через линейную комбинацию $Y_{0,0}, Y_{2,m}$, а, значит, $\mathscr{H}_{kk'}^{\alpha\beta}$ --- линейная комбинация интегралов от трех сферических функций:
+\[
+\mathscr{H}_{l,m,l',m'}^{\alpha\beta} = 
+\int\limits_{4\pi} \Omega_\alpha\Omega_\beta Y_{l,m}(\vec \Omega) Y_{l',m'}(\vec \Omega) d\Omega = 
+\sum_{\lambda = 0,2}\sum_{\mu = -\lambda}^{\lambda} c_{\alpha\beta}^{\lambda\mu} \begin{bmatrix}
+\lambda & l & l'\\
+\mu & m & m'
+\end{bmatrix}.
+\]
+Символ $\begin{bmatrix}
+\lambda & l & l'\\
+\mu & m & m'
+\end{bmatrix}$ определяется как
+\[
+\begin{bmatrix}
+\lambda & l & l'\\
+\mu & m & m'
+\end{bmatrix} = \int\limits_{4\pi} 
+Y_{\lambda,\mu}(\vec \Omega)
+Y_{l,m}(\vec \Omega)
+Y_{l',m'}(\vec \Omega) d\Omega.
+\]
+Данный интеграл не обращается в ноль только если выполнены правила отбора, приведенные в параграфе \ref{sec:select}. В частности, при $|l - l'| > 2$ интеграл равен нулю, поскольку $\lambda, l, l'$ не удовлетворяют неравенству треугольника.
+
+Рассмотрим возможные значения для $\mu$ в элементах матрицы $\Omega_\alpha\Omega_\beta$, см. \eqref{eq:oaob}:
+\[
+\mu(\Omega_\alpha\Omega_\beta) = \begin{pmatrix}
+0,2& -2 & 1\\
+-2 & 0,2 & -1\\
+1 & -1 & 0
+\end{pmatrix}
+\]
+
+Рассмотрим различные возможные значения $m, m'$. Пусть для определенности $m \leq m'$. Если $m = 0$, то в матрице $\mathscr{K}_{l,m,l',m'}^{\alpha\beta}$ остаются ненулевыми только элементы с 
+$m' \in \mu(\Omega_\alpha\Omega_\beta)$, причем для любого значения $m'$ в матрице остается не более одного ненулевого элемента. Аналогично для $m' = 0$.
+
+Заметим, что во всех случаях четность суммы $m + m' + \mu$ является необходимым условием нетривиальности интеграла.
+
+Если $m, m' < 0$, то в матрице $\mathscr{K}_{l,m,l',m'}^{\alpha\beta}$ ненулевыми будут лишь элементы с положительными $\mu(\Omega_\alpha\Omega_\beta)$. Так как в строках нет положительных элементов одинаковой четности, снова в каждой строке не более одного ненулевого элемента.
+
+Если $m < 0 < m'$, то в матрице $\mathscr{K}_{l,m,l',m'}^{\alpha\beta}$ ненулевыми будут лишь элементы с отрицательными $\mu(\Omega_\alpha\Omega_\beta)$. Так как в строках нет отрицательных элементов одинаковой четности, снова в каждой строке не более одного ненулевого элемента.
+
+В последнем случае $0 < m < m'$, в матрице $\mathscr{K}_{l,m,l',m'}^{\alpha\beta}$ ненулевыми будут лишь элементы c положительными $\mu(\Omega_\alpha\Omega_\beta)$. Случай аналогичен $m, m' > 0$.
+
+Таким образом, для всех возможных значений $m, m'$ матрицы $\mathscr{K}_{l,m,l',m'}^{\alpha\beta}$ содержат не более одного ненулевого элемента в каждой строке блока $3 \times 3$, что позволяет уменьшить необходимый объем хранимых данных. Вид данной матрицы при $K = 6$ приведен в параграфе \ref{sec:oioj}
