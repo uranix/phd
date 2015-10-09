@@ -1,0 +1,44 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{amsmath}
+\begin{document}
+
+\gdef\mpxshipout{\shipout\hbox\bgroup%
+  \setbox0=\hbox\bgroup}%
+\gdef\stopmpxshipout{\egroup  \dimen0=\ht0 \advance\dimen0\dp0
+  \dimen1=\ht0 \dimen2=\dp0
+  \setbox0=\hbox\bgroup
+    \box0
+    \ifnum\dimen0>0 \vrule width1sp height\dimen1 depth\dimen2 
+    \else \vrule width1sp height1sp depth0sp\relax
+    \fi\egroup
+  \ht0=0pt \dp0=0pt \box0 \egroup}
+\mpxshipout% line 39 ./instab.mp
+%
+\stopmpxshipout
+\mpxshipout% line 40 ./instab.mp
+%
+\stopmpxshipout
+\mpxshipout% line 41 ./instab.mp
+%
+\stopmpxshipout
+\mpxshipout% line 42 ./instab.mp
+%
+\stopmpxshipout
+\mpxshipout% line 83 ./instab.mp
+$j - 1$%
+\stopmpxshipout
+\mpxshipout% line 84 ./instab.mp
+$j    $%
+\stopmpxshipout
+\mpxshipout% line 85 ./instab.mp
+$j + 1$%
+\stopmpxshipout
+\mpxshipout% line 88 ./instab.mp
+$ \boldsymbol \omega $%
+\stopmpxshipout
+\mpxshipout% line 91 ./instab.mp
+$\theta_\text{кр}$%
+\stopmpxshipout
+\end{document}

@@ -1,0 +1,6 @@
+% Written by metapost version 1.999
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+setbounds _p to (0,0.0000)--(0.0000,0.0000)--
+ (0.0000,0.0000)--(0,0.0000)--cycle;
+_p endgroup
+mpxbreak
