@@ -34,13 +34,14 @@ U = \int_0^\infty U_\nu d\nu, \qquad
 \varkappa_\nu(\vec r, \vec \Omega) I_{\nu,\text{p}}(\vec r, \vec \Omega),
 \label{eq:transfer}
 \end{equation}
-где $\varkappa_\nu$ --- коэффициент поглощения излучения, исправленный на вынужденное испускание, $I_{\nu, \text{p}}$ --- интенсивность равновесного излучения. Предполагается, что коэффициент поглощения и интенсивность равновесного излучения в точке $\vec r$ могут быть различным для различных направлений $\vec \Omega$. Это позволяет учитывать доплеровские сдвиги частоты поглощения и испускания в движущемся веществе. При этом скорость движения предполагается дорелятивистской, так как в противном случае предположение о стационарности процесса переноса излучения не выполняется. Данное уравнение выражает баланс лучистой энергии, заключенной в элементарном цилиндре, окружающем луч $\vec r - \vec r_0 = \vec \Omega s$, см. рисунок \ref{fig:cyl}.
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=.2\textheight]{radiation-0.eps}
-\caption{Элементарный цилиндр, окружающий луч $\vec r - \vec r_0 = \vec \Omega s$}
-\label{fig:cyl}
-\end{figure}
+где $\varkappa_\nu$ --- коэффициент поглощения излучения, исправленный на вынужденное испускание, $I_{\nu, \text{p}}$ --- интенсивность равновесного излучения. Предполагается, что коэффициент поглощения и интенсивность равновесного излучения в точке $\vec r$ могут быть различным для различных направлений $\vec \Omega$. Это позволяет учитывать доплеровские сдвиги частоты поглощения и испускания в движущемся веществе. При этом скорость движения предполагается дорелятивистской, так как в противном случае предположение о стационарности процесса переноса излучения не выполняется. Данное уравнение выражает баланс лучистой энергии, заключенной в элементарном цилиндре, окружающем луч $\vec r - \vec r_0 = \vec \Omega s$.
+%, см. рисунок \ref{fig:cyl}.
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[height=.2\textheight]{radiation-0.eps}
+%\caption{Элементарный цилиндр, окружающий луч $\vec r - \vec r_0 = \vec \Omega s$}
+%\label{fig:cyl}
+%\end{figure}
 
 Для уравнения \eqref{eq:transfer} в ограниченной выпуклой области $G$ необходимо задать интенсивность $I_\nu$ на границе $\partial G$ для лучей, входящих в область. Если обозначить внешнюю нормаль к границе области $\partial G$ как $\vec n$, то граничное условие принимает вид
 \[
@@ -56,15 +57,28 @@ I_\nu(\vec r, \vec \Omega) = I_{\nu,0}(\vec r, \vec \Omega), \quad \vec r \in \p
 \[
 I(\vec r, \vec \Omega) = I(\vec r, \vec \Omega'), \quad \vec r \in \partial G, \; \vec \Omega' = \vec \Omega + 2 (\vec \Omega \vec n) \vec n,
 \]
-где $\vec \Omega'$ --- зеркальное отражение вектора $\vec \Omega$ относительно касательной плоскости (см. рисунок \ref{fig:reflect})
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=.15\textheight]{radiation-1.eps}
-\caption{Зеркальное отражение излучения от границы}
-\label{fig:reflect}
-\end{figure}
-
+где $\vec \Omega'$ --- зеркальное отражение вектора $\vec \Omega$ относительно касательной плоскости.
+% (см. рисунок \ref{fig:reflect})
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[height=.15\textheight]{radiation-1.eps}
+%\caption{Зеркальное отражение излучения от границы}
+%\label{fig:reflect}
+%\end{figure}
 В данной работе этот тип условий не рассматривается.
+
+Довольно часто от уравнения \eqref{eq:transfer}, переходят к одночастотному уравнению, которое можно получить, усредняя уравнение в частотной группе $\nu \in [\nu_1, \nu_2]$. При этом делается предположение о том, что величина
+\[
+\varkappa = \frac{\int_{\nu_1}^{\nu_2} \varkappa_\nu(\vec r, \vec \Omega) I_\nu(\vec r, \vec \Omega) d\nu}{
+\int_{\nu_1}^{\nu_2} I_\nu(\vec r, \vec \Omega) d\nu
+}
+\]
+не зависит от интенсивности $I_\nu(\vec r, \vec \Omega)$, а определяется некоторым усреднением только коэффициента поглощения $\varkappa_\nu(\vec r, \vec \Omega)$. В качестве таких усреднений обычно применяют усреднение по Планку либо по Росселанду \cite{zeldovich2008}:
+\begin{gather*}
+\varkappa_\text{Планк} = \frac{\int_{\nu_1}^{\nu_2} \varkappa_\nu I_{\nu, \text{p}} d\nu}{\int_{\nu_1}^{\nu_2} I_{\nu, \text{p}} d\nu}\\
+\varkappa_\text{Росселанд}^{-1} = \frac{\int_{\nu_1}^{\nu_2} \varkappa_\nu^{-1} \frac{dU_{\nu, \text{p}}}{dT} d\nu}{\int_{\nu_1}^{\nu_2} \frac{dU_{\nu, \text{p}}}{dT} d\nu}.
+\end{gather*}
+После осреднения по частоте уравнение переноса сохраняет свой вид, поэтому далее, если не указано обратное, рассматриваем одночастотное уравнение. Усреднение уравнения в наборе частотных групп $[\nu_i, \nu_{i+1}]$ называется многогрупповым приближением.
 
 Необходимо отметить, что в системе уравнений радиационной газовой динамики роль излучения ограничивается добавочными слагаемыми в плотность и плотность потока импульса, а также в плотность и плотность потока энергии системы <<вещество + излучение>>. Система радиационной газовой динамики принимает вид \cite{chetverushkin1985}
 \[
@@ -242,13 +256,14 @@ n^2e^\frac{\epsilon}{n^2kT} N\frac{h^3}{\sqrt{2\pi m_e kT}^3}.
 \]
 где $\bvec{v}\bvec{k}$ --- проекция скорости газа на направление к наблюдателю. Максимум поглощения находится в $\Delta v = -\bvec{v}\bvec{k}$.
 Произведем нормировку и определим $C$:
-\begin{gather*}
+\begin{gather}\notag
 \varkappa = \int\limits_{-\infty}^\infty \varkappa_\nu\big(\lambda_0(\nu - \nu_0)\big) d\nu = 
 \frac{1}{\lambda_0} \int\limits_{-\infty}^\infty \varkappa_\nu(\Delta v) d\Delta v = 
-\frac{C\sqrt{2\pi RT}}{\lambda_0}\\
+\frac{C\sqrt{2\pi RT}}{\lambda_0}\\\notag
 C = \frac{\varkappa \lambda_0}{\sqrt{2\pi RT}}\\
 \varkappa_\nu(\Delta v) = \frac{\varkappa \lambda_0}{\sqrt{2\pi RT}}\exp\left(-\frac{(\Delta v + \bvec{v}\bvec{k})^2}{2RT}\right).
-\end{gather*}
+\label{eq:absorb}
+\end{gather}
 
 Разобьем интересующий нас участок спектра $\Delta v \in [\Delta v_{\min}, \Delta v_{\max}]$ на $F$ спектральных групп
 \[
