@@ -22,7 +22,7 @@
 \sum_{j} [\psi_i, \psi_j] \varphi_j = (\psi_i, I_\text{p}), \qquad i = 1, 2, \dots, \operatorname{dim} \mathcal{H}_0.
 \end{equation*}
 
-На практике удобно выбрирать базис пространства $\mathcal{H}_0$ в виде прямого произведения базиса в координатном пространстве и базиса в угловом пространстве:
+На практике удобно выбирать базис пространства $\mathcal{H}_0$ в виде прямого произведения базиса в координатном пространстве и базиса в угловом пространстве:
 \begin{gather}
 \varphi(\vec r, \vec \Omega) = \sum_k \varphi_{k}(\vec r)\theta_k(\vec \Omega)\\
 \varphi_k(\vec r) = \sum_i \varphi_{i,k} \phi_i(\vec r)\\
@@ -590,7 +590,7 @@ W_{2n}(\xi) \frac{(1 - \xi^2)^2 - 4\xi^2}{(1 + \xi^2)^{n+3}} d\xi.
 \begin{algorithm}[ht!]
 \centering
 \begin{algorithmic}[1]
-\Function{ConjugateGradients}{$\mathcal{A}$, $f$, $\varphi$, $tol = 10^{-8}$}
+\Function{ConjugateGradients}{$\mathcal{A}$, $f$, $\varphi$, $tol = 10^{-6}$}
 \State $r = f - $ \Call{Product}{$\mathcal{A}$, $\varphi$}
 \State $resinit := ||r||^2$
 \For {$i = 1, \dots, K$} 
@@ -757,7 +757,7 @@ J_{\beta\dots\lambda}(\vec r) = -\frac{1}{\varkappa(\vec r)} \nabla_\alpha J_{\a
 
 Самый трудоемкий этап при решении системы линейных алгебраических уравнений методом сопряженных градиентов --- это непосредственно
 этап вычисления по заданному вектору $\varphi$ результата действия на него оператора задачи
-$[\mathcal{A}\varphi]_{i,k} = [\phi_i(\vec r)\theta_k(\vec \Omega), \varphi(\vec r, \vec \Omega)]$. Оператор задачи можно разбить на 
+$[\mathcal{A}\varphi]_{i,k} = [\phi_i(\vec r)\theta_k(\vec \Omega), \varphi(\vec r, \vec \Omega)]$, см. \cite{miptconf53}. Оператор задачи можно разбить на 
 объемную и поверхностную части
 \begin{align*}
 [\mathcal{A}^\text{объемн} \varphi]_{i,k} &= \left(\phi_i\theta_k, \varphi\right) + 
